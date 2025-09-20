@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dream Diary — Mobile Improvements</title>
+
+<!-- Fonts: Montserrat for headings/titles, Open Sans for body -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- Dark minimalist theme (single style block) ---------- */
+  :root{
+    --bg:#0b0e12;
+    --panel:#0f1418;
+    --card:#15191d;
+    --muted:#9aa3ab;
+    --text:#e6eef4;
+    --accent:#8bd3c7;
+    --danger:#ff7b7b;
+    --radius:14px;
+    --gap:12px;
+    --maxwidth:920px;
+  }
+
+  /* Base */
+  html,body{
+    height:100%;
+    margin:0;
+    background:var(--bg);
+    font-family:"Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  :focus{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* prevent background scroll when modal/popover open */
+  body.no-scroll { overflow:hidden; touch-action:none; }
+
+  .app {
+    max-width:var(--maxwidth);
+    margin:28px auto;
+    padding:18px;
+    background:var(--panel);
+    border-radius:calc(var(--radius) + 4px);
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+
+  .controls {
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  /* Search (smaller) */
+  .search {
+    flex:0 1 220px;
+    min-width:140px;
+    padding:8px 10px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.04);
+    background:transparent;
+    color:var(--text);
+    font-size:14px;
+  }
+
+  .control-group { display:flex; gap:8px; align-items:center; position:relative; }
+
+  .btn, .icon-btn {
+    background:transparent;
+    color:var(--text);
+    border:1px solid rgba(255,255,255,0.04);
+    padding:7px 10px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:13px;
+    font-family: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  .btn.primary {
+    background:var(--accent);
+    color:#041018;
+    border:0;
+  }
+  .small { padding:6px 8px; font-size:13px; border-radius:8px; }
+
+  .timeline {
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    max-height:62vh;
+    overflow:auto;
+    padding-right:6px;
+  }
+
+  .card {
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:12px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    min-height:80px;
+  }
+  .meta { width:86px; flex:0 0 86px; display:flex;flex-direction:column;gap:6px; align-items:flex-start; }
+  .date { font-family:"Open Sans", system-ui; color:var(--muted); font-size:13px; }
+
+  /* Titles/headings use Montserrat (semi-bold) */
+  .title {
+    font-family: "Montserrat", "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight:600;
+    font-size:15px;
+    color:var(--text);
+    word-break:break-word;
+  }
+
+  .content {
+    flex:1;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.4;
+    white-space:pre-wrap;
+  }
+  .tag-row { margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+  .tag {
+    background:transparent;
+    color:var(--accent);
+    border:1px solid rgba(139,211,199,0.12);
+    padding:6px 8px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+    font-family: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .actions { display:flex; gap:8px; align-items:center; margin-left:auto; }
+  .icon-btn { width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; }
+  .icon-btn svg { width:16px; height:16px; fill:var(--text); }
+
+  .modal-backdrop { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background: rgba(2,4,6,0.6); z-index:60; padding:18px; box-sizing:border-box; }
+  .modal {
+    width:100%;
+    max-width:820px;
+    background:var(--panel);
+    border-radius:12px;
+    padding:16px;
+    box-sizing:border-box;
+    border:1px solid rgba(255,255,255,0.03);
+    overflow:auto;
+  }
+
+  .form-row { display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  input[type="date"], input[type="month"], input[type="text"], textarea { background:transparent; color:var(--text); border:1px solid rgba(255,255,255,0.04); padding:8px; border-radius:10px; font-size:14px; font-family: "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+  textarea { min-height:110px; resize:vertical; width:100%; }
+  .empty { padding:26px; border-radius:10px; text-align:center; color:var(--muted); background:transparent; border:1px dashed rgba(255,255,255,0.02); }
+
+  /* Date picker popover (desktop) */
+  .date-pop { position:absolute; top:46px; left:0; width:320px; background:var(--panel); border:1px solid rgba(255,255,255,0.04); border-radius:10px; padding:12px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); z-index:70; display:none; }
+  .date-pop.open { display:block; }
+  .date-pop .row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+
+  .small-note { font-size:13px; color:var(--muted); margin-top:8px; }
+
+  /* ---------------- Mobile styles ---------------- */
+  @media (max-width:720px) {
+    /* Bigger touch targets for mobile */
+    .icon-btn { width:48px; height:48px; }
+    .btn.small { height:48px; min-width:48px; padding:0 12px; border-radius:12px; }
+    .search { flex:1 1 180px; min-width:120px; padding:10px 12px; }
+
+    /* Modal becomes bottom-sheet / full-screen-ish */
+    .modal-backdrop { align-items:flex-end; padding:0; background: rgba(2,4,6,0.5); }
+    .modal {
+      width:100%;
+      max-width:none;
+      border-radius:14px 14px 0 0;
+      height:85vh;
+      margin:0;
+      padding:18px;
+    }
+
+    /* Date popover becomes full-screen modal on mobile */
+    .date-pop {
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      border-radius:0;
+      display:none;
+      padding:18px;
+      overflow:auto;
+      align-items:flex-start;
+      justify-content:flex-start;
+    }
+    .date-pop.open { display:flex; background:var(--panel); z-index:80; }
+    .date-pop .row { width:100%; }
+  }
+
+  @media (max-width:420px) {
+    .modal { height:90vh; padding:14px; }
+    .icon-btn { width:52px; height:52px; }
+  }
+</style>
+</head>
+<body>
+  <main class="app" id="app" aria-label="Dream Diary">
+    <div class="controls" role="toolbar" aria-label="Controls">
+      <div class="control-group" style="position:relative;">
+        <input id="search" class="search" placeholder="Search dreams or tags…" aria-label="Search dreams" />
+        <!-- calendar icon -->
+        <button id="dateBtn" class="btn small" title="Date range" aria-haspopup="dialog" aria-expanded="false" style="margin-left:6px;"> 
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 10h5v5H7z" opacity="0.9"/><path fill="currentColor" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 15H5V9h14v10z"/></svg>
+        </button>
+
+        <!-- date popover -->
+        <div id="datePop" class="date-pop" role="dialog" aria-label="Date range picker" aria-hidden="true">
+          <div style="font-weight:800" class="modal-title">Date Range</div>
+          <div class="small-note">Quick pick a month, year, or custom range.</div>
+
+          <div class="row" style="margin-top:12px;">
+            <label style="font-size:13px;color:var(--muted);width:64px;">Month</label>
+            <input id="pickMonth" type="month" />
+            <button id="applyMonth" class="btn small">Apply</button>
+          </div>
+
+          <div class="row">
+            <label style="font-size:13px;color:var(--muted);width:64px;">Year</label>
+            <input id="pickYear" type="number" min="1900" max="2100" placeholder="e.g. 2024" style="width:90px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);" />
+            <button id="applyYear" class="btn small">Apply</button>
+          </div>
+
+          <div style="border-top:1px solid rgba(255,255,255,0.03);margin-top:10px;padding-top:10px;width:100%;">
+            <div style="font-weight:700;font-size:13px;">Custom range</div>
+            <div class="row" style="margin-top:8px;">
+              <input id="pickFrom" type="date" />
+              <input id="pickTo" type="date" />
+            </div>
+            <div class="row" style="margin-top:8px; justify-content:flex-end;">
+              <button id="clearDate" class="btn">Clear</button>
+              <button id="applyRange" class="btn primary">Apply Range</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+        <!-- Export button (replaces samples) -->
+        <button id="exportBtn" class="btn small" title="Export dreams">Export</button>
+      </div>
+
+      <div style="margin-left:auto;">
+        <button id="addBtn" class="btn primary" title="Add new dream">＋</button>
+      </div>
+    </div>
+
+    <section id="timeline" class="timeline" aria-live="polite" aria-label="Vision timeline"></section>
+    <div id="empty" class="empty" style="display:none">No dreams yet. Click + to add your first vision.</div>
+  </main>
+
+  <div id="modalRoot" aria-hidden="true"></div>
+
+<script>
+/* Dream Diary — Mobile improvements applied:
+   1) Modal becomes bottom-sheet/fullscreen on small screens.
+   2) Larger touch targets for icon buttons on mobile.
+   3) Date picker becomes a full-screen modal on mobile (popover desktop).
+   Focus is managed and body scrolling is prevented while modal/popover is open.
+*/
+
+/* Utilities */
+const LS_KEY = 'dreams_v1';
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from((r||document).querySelectorAll(s));
+const uid = () => 'd_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7);
+
+/* Data */
+function load() { try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch(e){ return []; } }
+function save(arr) { localStorage.setItem(LS_KEY, JSON.stringify(arr || [])); }
+let dreams = load();
+let currentFilter = '';
+let dateFilter = { type: 'none' };
+
+/* Samples (unused in UI) */
+const SAMPLE_A = [
+  { id: uid(), date: '2025-09-10', title: 'Lamp on the hill', content: 'A lamp burned steadily on a hill; I felt guided to follow the light.', tags: ['guidance','lamp'] },
+  { id: uid(), date: '2025-08-27', title: 'Comforting voice', content: 'A familiar hymn and a gentle hand on my shoulder. Peace.', tags: ['comfort','hymn'] },
+  { id: uid(), date: '2025-07-12', title: 'River and dove', content: 'I walked along a river; a dove landed and looked at me.', tags: ['water','dove'] }
+];
+
+/* DOM refs */
+const timelineEl = $('#timeline');
+const emptyEl = $('#empty');
+const searchEl = $('#search');
+const addBtn = $('#addBtn');
+const modalRoot = $('#modalRoot');
+const dateBtn = $('#dateBtn');
+const datePop = $('#datePop');
+const pickMonth = $('#pickMonth');
+const applyMonth = $('#applyMonth');
+const pickYear = $('#pickYear');
+const applyYear = $('#applyYear');
+const pickFrom = $('#pickFrom');
+const pickTo = $('#pickTo');
+const applyRange = $('#applyRange');
+const clearDate = $('#clearDate');
+const exportBtn = $('#exportBtn');
+
+/* Focus bookkeeping */
+let __previousActive = null;
+
+/* Render */
+function render() {
+  const q = currentFilter.trim().toLowerCase();
+  const filtered = dreams.slice().sort((a,b)=> new Date(b.date) - new Date(a.date)).filter(d => {
+    let textMatch = true;
+    if(q) {
+      const title = (d.title || '').toLowerCase();
+      const content = (d.content || '').toLowerCase();
+      const tagMatch = (d.tags || []).some(t => t.toLowerCase().includes(q));
+      textMatch = title.includes(q) || content.includes(q) || tagMatch;
+    }
+    if(!textMatch) return false;
+    if(dateFilter.type === 'none') return true;
+    const dt = new Date(d.date);
+    if(isNaN(dt)) return false;
+    if(dateFilter.type === 'month') {
+      const [Y,M] = dateFilter.month.split('-').map(Number);
+      return dt.getFullYear() === Y && (dt.getMonth()+1) === M;
+    } else if(dateFilter.type === 'year') {
+      return dt.getFullYear() === Number(dateFilter.year);
+    } else if(dateFilter.type === 'range') {
+      const from = dateFilter.from ? new Date(dateFilter.from) : null;
+      const to = dateFilter.to ? new Date(dateFilter.to) : null;
+      if(from && dt < new Date(from.getFullYear(), from.getMonth(), from.getDate())) return false;
+      if(to && dt > new Date(to.getFullYear(), to.getMonth(), to.getDate(), 23,59,59,999)) return false;
+      return true;
+    }
+    return true;
+  });
+
+  timelineEl.innerHTML = '';
+  if(filtered.length === 0) {
+    emptyEl.style.display = 'block';
+  } else {
+    emptyEl.style.display = 'none';
+    for(const d of filtered) timelineEl.appendChild(renderCard(d));
+  }
+}
+
+/* Card */
+function renderCard(d) {
+  const article = document.createElement('article');
+  article.className = 'card';
+  article.dataset.id = d.id;
+
+  const meta = document.createElement('div'); meta.className = 'meta';
+  const date = document.createElement('div'); date.className = 'date'; date.textContent = (new Date(d.date)).toLocaleDateString();
+  const title = document.createElement('div'); title.className = 'title'; title.textContent = d.title || '(Untitled)';
+  meta.appendChild(date); meta.appendChild(title);
+
+  const content = document.createElement('div'); content.className = 'content';
+  content.textContent = d.content || '';
+  const tagRow = document.createElement('div'); tagRow.className = 'tag-row';
+  (d.tags || []).forEach(tag => {
+    const t = document.createElement('button');
+    t.className = 'tag';
+    t.type = 'button';
+    t.textContent = tag;
+    t.title = 'Filter by tag';
+    t.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      currentFilter = tag; searchEl.value = tag; render();
+    });
+    tagRow.appendChild(t);
+  });
+  content.appendChild(tagRow);
+
+  const actions = document.createElement('div'); actions.className = 'actions';
+  const editBtn = document.createElement('button'); editBtn.className = 'icon-btn'; editBtn.title = 'Edit';
+  editBtn.innerHTML = svgIcon('edit');
+  const delBtn = document.createElement('button'); delBtn.className = 'icon-btn'; delBtn.title = 'Delete';
+  delBtn.innerHTML = svgIcon('trash');
+
+  editBtn.addEventListener('click', (ev) => { ev.stopPropagation(); openEditor(d.id); });
+  delBtn.addEventListener('click', (ev) => { ev.stopPropagation(); if(confirm('Delete this dream?')) { dreams = dreams.filter(x => x.id !== d.id); save(dreams); render(); } });
+
+  actions.appendChild(editBtn); actions.appendChild(delBtn);
+
+  article.appendChild(meta); article.appendChild(content); article.appendChild(actions);
+  article.addEventListener('click', () => openViewer(d.id));
+  return article;
+}
+
+/* Icons */
+function svgIcon(name) {
+  if(name === 'edit') return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM21.41 6.34a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0L15.13 4.59l3.75 3.75 2.53-2z"></path></svg>` ;
+  if(name === 'trash') return `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
+  return '';
+}
+
+/* Modal helpers with focus management and body scroll lock */
+function closeModal() {
+  modalRoot.innerHTML = '';
+  modalRoot.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('no-scroll');
+  // restore focus
+  try { if(__previousActive) __previousActive.focus(); } catch(e){}
+  __previousActive = null;
+}
+function openModal(contentEl) {
+  // save previous active element
+  __previousActive = document.activeElement;
+  modalRoot.innerHTML = '';
+  modalRoot.setAttribute('aria-hidden', 'false');
+  const backdrop = document.createElement('div'); backdrop.className = 'modal-backdrop';
+  const modal = document.createElement('div'); modal.className = 'modal';
+  modal.appendChild(contentEl); backdrop.appendChild(modal); modalRoot.appendChild(backdrop);
+  document.body.classList.add('no-scroll');
+
+  // click backdrop to close (already implemented)
+  backdrop.addEventListener('click', (ev) => { if(ev.target === backdrop) closeModal(); });
+
+  // focus first focusable element inside modal
+  setTimeout(() => {
+    const focusable = modal.querySelector('input,button,textarea,select,[tabindex]:not([tabindex="-1"])');
+    if(focusable) focusable.focus();
+  }, 50);
+}
+
+/* Date popover open/close with mobile behavior */
+function openDatePop() {
+  __previousActive = document.activeElement;
+  datePop.classList.add('open');
+  datePop.setAttribute('aria-hidden', 'false');
+  dateBtn.setAttribute('aria-expanded','true');
+  // lock body on small screens (no-scroll CSS used)
+  if(window.matchMedia('(max-width:720px)').matches) document.body.classList.add('no-scroll');
+  // focus first input
+  setTimeout(() => {
+    const f = datePop.querySelector('input');
+    if(f) f.focus();
+  }, 40);
+}
+function closeDatePop() {
+  datePop.classList.remove('open');
+  datePop.setAttribute('aria-hidden','true');
+  dateBtn.setAttribute('aria-expanded','false');
+  document.body.classList.remove('no-scroll');
+  try { if(__previousActive) __previousActive.focus(); } catch(e){}
+  __previousActive = null;
+}
+
+/* Editor & Viewer */
+function openEditor(existingId = null) {
+  const existing = existingId ? dreams.find(d => d.id === existingId) : null;
+  const form = document.createElement('div');
+  form.innerHTML = `<div class="modal-title" style="font-weight:800">${existing ? 'Edit Revelation' : 'New Word'}</div>`;
+  const titleInput = document.createElement('input'); titleInput.type = 'text'; titleInput.placeholder = 'Title (optional)'; titleInput.style.width = '100%';
+  const dateInput = document.createElement('input'); dateInput.type = 'date';
+  const tagsInput = document.createElement('input'); tagsInput.type = 'text'; tagsInput.placeholder = 'tags (comma separated)';
+  const contentArea = document.createElement('textarea'); contentArea.placeholder = 'Record the vision — write only what you saw.';
+  const saveBtn = document.createElement('button'); saveBtn.className = 'btn primary'; saveBtn.textContent = 'Save';
+  const cancelBtn = document.createElement('button'); cancelBtn.className = 'btn'; cancelBtn.textContent = 'Cancel';
+
+  if(existing) {
+    titleInput.value = existing.title || '';
+    dateInput.value = (new Date(existing.date)).toISOString().slice(0,10);
+    tagsInput.value = (existing.tags || []).join(', ');
+    contentArea.value = existing.content || '';
+  } else {
+    dateInput.value = new Date().toISOString().slice(0,10);
+  }
+
+  const note = document.createElement('div'); note.className = 'small-note'; note.textContent = 'Tags are simple keywords for lookup; separate with commas.';
+  form.appendChild(titleInput);
+  const row = document.createElement('div'); row.className = 'form-row';
+  row.appendChild(dateInput); row.appendChild(tagsInput);
+  form.appendChild(row);
+  form.appendChild(contentArea);
+  form.appendChild(note);
+  const actionRow = document.createElement('div'); actionRow.style.display='flex'; actionRow.style.gap='8px'; actionRow.style.justifyContent='flex-end'; actionRow.style.marginTop='12px';
+  actionRow.appendChild(cancelBtn); actionRow.appendChild(saveBtn);
+  form.appendChild(actionRow);
+
+  cancelBtn.addEventListener('click', closeModal);
+  saveBtn.addEventListener('click', () => {
+    const title = titleInput.value.trim();
+    const date = dateInput.value || new Date().toISOString().slice(0,10);
+    const content = contentArea.value.trim();
+    const tags = tagsInput.value.split(',').map(s => s.trim()).filter(Boolean);
+    if(!content){ alert('Please provide the dream text.'); contentArea.focus(); return; }
+    if(existing) {
+      existing.title = title; existing.date = date; existing.content = content; existing.tags = tags;
+    } else {
+      const obj = { id: uid(), date, title, content, tags };
+      dreams.unshift(obj);
+    }
+    save(dreams); render(); closeModal();
+  });
+
+  openModal(form);
+}
+
+function openViewer(id) {
+  const ent = dreams.find(d => d.id === id);
+  if(!ent) return;
+  const view = document.createElement('div');
+  const head = document.createElement('div'); head.style.display='flex'; head.style.justifyContent='space-between'; head.style.alignItems='center';
+  const titleBlock = document.createElement('div');
+  const titleEl = document.createElement('div'); titleEl.style.fontWeight='800'; titleEl.textContent = ent.title || '(Untitled)';
+  const dateEl = document.createElement('div'); dateEl.className = 'small-note'; dateEl.style.marginTop='6px'; dateEl.textContent = (new Date(ent.date)).toLocaleString();
+  titleBlock.appendChild(titleEl); titleBlock.appendChild(dateEl);
+  const editBtn = document.createElement('button'); editBtn.className = 'btn'; editBtn.textContent = 'Edit';
+  editBtn.addEventListener('click', () => { closeModal(); openEditor(id); });
+  head.appendChild(titleBlock); head.appendChild(editBtn);
+
+  const content = document.createElement('div'); content.style.marginTop='12px'; content.style.whiteSpace='pre-wrap'; content.textContent = ent.content;
+  const tagsRow = document.createElement('div'); tagsRow.style.marginTop='12px';
+  (ent.tags || []).forEach(t => {
+    const btn = document.createElement('button'); btn.className = 'tag'; btn.textContent = t; btn.style.marginRight='6px';
+    btn.addEventListener('click', () => { currentFilter = t; searchEl.value = t; render(); closeModal(); });
+    tagsRow.appendChild(btn);
+  });
+
+  view.appendChild(head); view.appendChild(content); view.appendChild(tagsRow);
+  openModal(view);
+}
+
+/* Wiring controls */
+addBtn.addEventListener('click', () => openEditor(null));
+searchEl.addEventListener('input', (e) => { currentFilter = e.target.value; render(); });
+
+/* Guarded 'n' shortcut */
+document.addEventListener('keydown', (e) => {
+  const active = document.activeElement;
+  const tag = active && active.tagName && active.tagName.toUpperCase();
+  const isEditable = active && (active.isContentEditable === true);
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || isEditable) return;
+  if (e.key && e.key.toLowerCase() === 'n' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    e.preventDefault();
+    openEditor(null);
+  }
+});
+
+/* Date popover toggle (desktop) and mobile full-screen behavior */
+dateBtn.addEventListener('click', (ev) => {
+  ev.stopPropagation();
+  if(datePop.classList.contains('open')) {
+    closeDatePop();
+  } else openDatePop();
+});
+document.addEventListener('click', (ev) => {
+  // close date pop if clicking outside; allow mobile full-screen to close via this too
+  if(!datePop.contains(ev.target) && ev.target !== dateBtn) closeDatePop();
+});
+
+/* Escape key closes modal/popover */
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') {
+    if(modalRoot && modalRoot.children.length) closeModal();
+    if(datePop && datePop.classList.contains('open')) closeDatePop();
+  }
+});
+
+/* Apply month/year/range handlers */
+function scrollToFirstMatch() {
+  const first = timelineEl.querySelector('.card');
+  if(first) first.scrollIntoView({behavior:'smooth', block:'center'});
+}
+applyMonth.addEventListener('click', () => {
+  const v = pickMonth.value; if(!v) return;
+  dateFilter = { type: 'month', month: v };
+  closeDatePop();
+  render(); setTimeout(scrollToFirstMatch, 120);
+});
+applyYear.addEventListener('click', () => {
+  const v = pickYear.value.trim(); if(!v || isNaN(Number(v))) return alert('Enter a valid year (e.g. 2024).');
+  dateFilter = { type: 'year', year: String(Number(v)) };
+  closeDatePop();
+  render(); setTimeout(scrollToFirstMatch, 120);
+});
+applyRange.addEventListener('click', () => {
+  const from = pickFrom.value; const to = pickTo.value;
+  if(!from && !to) { dateFilter = { type: 'none' }; closeDatePop(); render(); return; }
+  if(from && to && new Date(from) > new Date(to)) return alert('Start date must be before end date.');
+  dateFilter = { type: 'range', from: from || null, to: to || null };
+  closeDatePop();
+  render(); setTimeout(scrollToFirstMatch, 120);
+});
+clearDate.addEventListener('click', () => {
+  dateFilter = { type: 'none' };
+  pickMonth.value = ''; pickYear.value = ''; pickFrom.value = ''; pickTo.value = '';
+  closeDatePop();
+  render();
+});
+
+/* Export functionality */
+exportBtn.addEventListener('click', () => {
+  try {
+    const data = JSON.stringify(dreams, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dreams_export_${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert('Export failed: ' + (e && e.message ? e.message : String(e)));
+  }
+});
+
+/* Sample loader (unused, kept for debug) */
+function promptReplaceAndLoad(sample) {
+  const ok = confirm('Replace current entries with this sample set? (Cancel to preview only)');
+  if (ok) {
+    dreams = sample.slice().map(d => ({ ...d, id: uid() }));
+    save(dreams); render();
+  } else {
+    const previousSaved = load();
+    dreams = sample.slice().map(d => ({ ...d, id: uid() }));
+    render();
+    setTimeout(() => {
+      const modalOpen = !!(modalRoot && modalRoot.children.length);
+      if (!modalOpen) {
+        dreams = previousSaved;
+        render();
+      } else {
+        console.info('Preview restore skipped because a modal is open.');
+      }
+    }, 6000);
+  }
+}
+
+/* Initial render */
+render();
+
+/* Debug helpers */
+window.__dreams = {
+  get: () => dreams,
+  set: (arr) => { dreams = arr; save(dreams); render(); },
+  clear: () => { dreams = []; save(dreams); render(); }
+};
+</script>
+</body>
+</html>
