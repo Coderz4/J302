@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECHO</title>
+    <title>Dream Journal</title>
     <style>
         * {
             margin: 0;
@@ -13,15 +13,15 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f7;
+            background: #fafafa;
             min-height: 100vh;
             color: #1d1d1f;
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             padding: 20px 40px;
             position: sticky;
             top: 0;
@@ -41,129 +41,21 @@
             margin-bottom: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            align-items: flex-start;
         }
 
         .search-input {
-            padding: 11px 16px;
+            padding: 16px 20px;
             border: none;
             border-radius: 10px;
             font-size: 17px;
-            background: rgba(142, 142, 147, 0.12);
+            background: #f5f5f7;
             width: 100%;
             max-width: 500px;
-            color: #1d1d1f;
         }
 
         .search-input:focus {
-            outline: none;
-            background: rgba(142, 142, 147, 0.18);
-            box-shadow: 0 0 0 4px rgba(0, 125, 250, 0.1);
-        }
-
-        .search-input::placeholder {
-            color: rgba(60, 60, 67, 0.6);
-        }
-
-        .search-suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
+            outline: 2px solid #007AFF;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-            display: none;
-            z-index: 10;
-        }
-
-        .search-suggestions.show {
-            display: block;
-        }
-
-        .suggestion-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            transition: background 0.2s ease;
-        }
-
-        .suggestion-item:hover {
-            background: #f5f5f7;
-        }
-
-        .suggestion-item:last-child {
-            border-bottom: none;
-        }
-
-        .suggestion-icon {
-            margin-right: 8px;
-            opacity: 0.6;
-        }
-
-        .advanced-filters {
-            display: none;
-            padding: 20px 24px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: saturate(180%) blur(20px);
-            border-radius: 12px;
-            margin-top: 16px;
-            width: 100%;
-            max-width: 800px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .advanced-filters.show {
-            display: block;
-        }
-
-        .filter-group {
-            margin-bottom: 16px;
-        }
-
-        .filter-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .filter-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1d1d1f;
-        }
-
-        .filter-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .filter-chip {
-            padding: 6px 12px;
-            border: 0.5px solid rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.85);
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s ease;
-            color: #1d1d1f;
-            letter-spacing: -0.08px;
-        }
-
-        .filter-chip:hover {
-            background: rgba(255, 255, 255, 1);
-            border-color: rgba(0, 125, 250, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .filter-chip.active {
-            background: #007AFF;
-            color: white;
-            border-color: #007AFF;
         }
 
         .filter-controls {
@@ -172,37 +64,26 @@
         }
 
         .filter-select {
-            padding: 11px 16px;
+            padding: 16px 20px;
             border: none;
             border-radius: 10px;
-            background: rgba(142, 142, 147, 0.12);
+            background: #f5f5f7;
             font-size: 15px;
             cursor: pointer;
-            color: #1d1d1f;
         }
 
-        .calendar-trigger,
-        .advanced-trigger {
-            padding: 11px 16px;
+        .calendar-trigger {
+            padding: 16px 20px;
             border: none;
             border-radius: 10px;
-            background: rgba(142, 142, 147, 0.12);
-            font-size: 15px;
+            background: #f5f5f7;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: #1d1d1f;
-            font-weight: 400;
-            letter-spacing: -0.08px;
         }
 
-        .calendar-trigger:hover,
-        .advanced-trigger:hover {
-            background: rgba(142, 142, 147, 0.18);
-        }
-
-        .advanced-trigger.active {
-            background: #007AFF;
-            color: white;
+        .calendar-trigger:hover {
+            background: #e8e8ed;
         }
 
         .controls {
@@ -218,27 +99,73 @@
             color: #86868b;
         }
 
-        .add-dream-btn {
+        .add-dream-btn, .menu-btn {
             background: #007AFF;
             color: white;
             border: none;
-            padding: 11px 22px;
+            padding: 16px 32px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
             font-size: 15px;
             transition: all 0.2s ease;
-            letter-spacing: -0.08px;
+        }
+
+        .menu-btn {
+            background: #f5f5f7;
+            color: #1d1d1f;
         }
 
         .add-dream-btn:hover {
-            background: #0077ED;
+            background: #0056CC;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 125, 250, 0.25);
         }
 
-        .add-dream-btn:active {
+        .menu-btn:hover {
+            background: #e8e8ed;
+            transform: translateY(-1px);
+        }
+
+        .add-dream-btn:active, .menu-btn:active {
             transform: translateY(0);
+        }
+
+        .menu-container {
+            position: relative;
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-top: 8px;
+            min-width: 180px;
+            display: none;
+            z-index: 200;
+        }
+
+        .menu-dropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background: #f5f5f7;
         }
 
         .content-area {
@@ -257,10 +184,179 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            
+            .header h1 {
+                font-size: 32px;
+                margin-bottom: 16px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .search-input {
+                max-width: 100%;
+            }
+            
+            .filter-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .filter-select {
+                flex: 1;
+                padding: 12px 16px;
+            }
+            
+            .calendar-trigger {
+                padding: 12px 16px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .add-dream-btn, .menu-btn {
+                width: 100%;
+                padding: 14px 24px;
+            }
+            
+            .results-grid {
+                padding: 20px;
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .results-header {
+                padding: 20px;
+            }
+            
+            .dream-card {
+                padding: 20px;
+            }
+            
+            .modal {
+                width: 95%;
+                padding: 24px;
+                max-height: 90vh;
+            }
+            
+            .modal h2 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 14px 24px;
+            }
+            
+            .calendar-picker {
+                min-width: 280px;
+                max-width: 95%;
+            }
+            
+            .calendar-header {
+                padding: 12px 16px;
+            }
+            
+            .calendar-select {
+                font-size: 13px;
+                padding: 5px 6px;
+            }
+            
+            .calendar-content {
+                padding: 16px;
+            }
+            
+            .calendar-day {
+                font-size: 13px;
+                min-height: 36px;
+            }
+            
+            .performance-indicator {
+                bottom: 16px;
+                right: 16px;
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .search-input {
+                font-size: 16px;
+                padding: 12px 16px;
+            }
+            
+            .filter-select,
+            .calendar-trigger {
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+            
+            .stats {
+                font-size: 14px;
+                text-align: center;
+            }
+            
+            .results-grid {
+                padding: 16px;
+            }
+            
+            .dream-card {
+                padding: 16px;
+            }
+            
+            .dream-title {
+                font-size: 16px;
+            }
+            
+            .dream-content {
+                font-size: 14px;
+            }
+            
+            .modal {
+                padding: 20px;
+            }
+            
+            .modal h2 {
+                font-size: 20px;
+            }
+            
+            .calendar-picker {
+                min-width: 260px;
+            }
+            
+            .calendar-day {
+                font-size: 12px;
+                min-height: 32px;
+            }
+        }
+
         .sidebar {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: saturate(180%) blur(20px);
-            border-right: 1px solid rgba(0, 0, 0, 0.06);
+            background: white;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
             padding: 40px 32px;
             min-height: calc(100vh - 200px);
         }
@@ -287,7 +383,7 @@
         }
 
         .category-item:hover {
-            background: rgba(142, 142, 147, 0.12);
+            background: #f5f5f7;
         }
 
         .category-item.active {
@@ -297,66 +393,24 @@
 
         .category-count {
             font-size: 13px;
-            background: rgba(0, 0, 0, 0.06);
-            padding: 2px 8px;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 4px 8px;
             border-radius: 6px;
             font-weight: 500;
         }
 
         .category-item.active .category-count {
-            background: rgba(255, 255, 255, 0.25);
-        }
-
-        .saved-searches {
-            margin-top: 32px;
-        }
-
-        .saved-search-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 16px;
-            background: #f5f5f7;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
-        }
-
-        .saved-search-item:hover {
-            background: #e8e8ed;
-        }
-
-        .saved-search-delete {
-            background: none;
-            border: none;
-            color: #FF3B30;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .main-content {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: saturate(180%) blur(20px);
+            background: white;
             min-height: calc(100vh - 200px);
         }
 
         .results-header {
             padding: 32px 40px 20px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-        }
-
-        .search-stats {
-            font-size: 13px;
-            color: #007AFF;
-            padding: 8px 16px;
-            background: rgba(0, 122, 255, 0.1);
-            border-radius: 8px;
-            display: inline-block;
-            margin-bottom: 12px;
-            font-weight: 500;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         .results-grid {
@@ -367,9 +421,8 @@
         }
 
         .dream-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: saturate(180%) blur(20px);
-            border: 0.5px solid rgba(0, 0, 0, 0.08);
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 24px;
             transition: all 0.3s ease;
@@ -379,8 +432,7 @@
 
         .dream-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .dream-date {
@@ -414,12 +466,11 @@
         }
 
         .tag {
-            background: rgba(142, 142, 147, 0.12);
-            padding: 4px 10px;
-            border-radius: 6px;
+            background: #f5f5f7;
+            padding: 6px 12px;
+            border-radius: 8px;
             font-size: 13px;
-            font-weight: 400;
-            letter-spacing: -0.08px;
+            font-weight: 500;
         }
 
         .dream-relationships {
@@ -441,10 +492,15 @@
             justify-content: center;
             z-index: 1000;
             backdrop-filter: blur(10px);
+            overflow-y: auto;
         }
 
         .modal-overlay.show {
             display: flex;
+        }
+        
+        body.modal-open {
+            overflow: hidden;
         }
 
         .modal {
@@ -707,12 +763,9 @@
 </head>
 <body>
     <div class="header">
-        <h1>ECHO</h1>
+        <h1>Dream Journal</h1>
         <div class="search-container">
-            <div style="position: relative; width: 100%; max-width: 500px;">
-                <input type="text" class="search-input" placeholder="Search your dreams..." id="searchInput" autocomplete="off">
-                <div class="search-suggestions" id="searchSuggestions"></div>
-            </div>
+            <input type="text" class="search-input" placeholder="Search your dreams..." id="searchInput">
             <div class="filter-controls">
                 <select class="filter-select" id="dateFilter">
                     <option value="">All Time</option>
@@ -720,34 +773,20 @@
                     <option value="month">This Month</option>
                     <option value="year">This Year</option>
                 </select>
-                <button class="calendar-trigger" id="calendarTrigger" title="Pick a date">Calendar</button>
-                <button class="advanced-trigger" id="advancedTrigger" title="Advanced filters">Filters</button>
-            </div>
-        </div>
-        <div class="advanced-filters" id="advancedFilters">
-            <div class="filter-group">
-                <label>Themes</label>
-                <div class="filter-chips" id="themeFilters">
-                    <div class="filter-chip" data-theme="adventure" onclick="window.app.toggleTheme('adventure')">Adventure</div>
-                    <div class="filter-chip" data-theme="fantasy" onclick="window.app.toggleTheme('fantasy')">Fantasy</div>
-                    <div class="filter-chip" data-theme="memory" onclick="window.app.toggleTheme('memory')">Memory</div>
-                    <div class="filter-chip" data-theme="nature" onclick="window.app.toggleTheme('nature')">Nature</div>
-                    <div class="filter-chip" data-theme="urban" onclick="window.app.toggleTheme('urban')">Urban</div>
-                </div>
-            </div>
-            <div class="filter-group">
-                <label>Mood</label>
-                <div class="filter-chips" id="moodFilters">
-                    <div class="filter-chip" data-mood="peaceful" onclick="window.app.toggleMood('peaceful')">Peaceful</div>
-                    <div class="filter-chip" data-mood="exciting" onclick="window.app.toggleMood('exciting')">Exciting</div>
-                    <div class="filter-chip" data-mood="mysterious" onclick="window.app.toggleMood('mysterious')">Mysterious</div>
-                    <div class="filter-chip" data-mood="nostalgic" onclick="window.app.toggleMood('nostalgic')">Nostalgic</div>
-                </div>
+                <button class="calendar-trigger" id="calendarTrigger" title="Pick a date">📅</button>
             </div>
         </div>
         <div class="controls">
             <div class="stats" id="statsDisplay">0 dreams total</div>
-            <button class="add-dream-btn" id="addDreamBtn" onclick="window.app.showModal()">Add Dream</button>
+            <button class="add-dream-btn" id="addDreamBtn">Add Dream</button>
+            <div class="menu-container">
+                <button class="menu-btn" id="menuBtn">Menu</button>
+                <div class="menu-dropdown" id="menuDropdown">
+                    <div class="menu-item" id="manualBackupBtn">Manual Backup</div>
+                    <div class="menu-item" id="driveBackupBtn">Setup Google Drive Backup</div>
+                    <div class="menu-item" id="importBackupBtn">Import Backup</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -755,21 +794,15 @@
         <div class="sidebar">
             <h3>Categories</h3>
             <ul class="category-list" id="categoryList">
-                <li class="category-item active" data-category="all" onclick="window.app.selectCategory('all')">
+                <li class="category-item active" data-category="all">
                     <span>All Dreams</span>
                     <span class="category-count" id="allCount">0</span>
                 </li>
             </ul>
-            
-            <div class="saved-searches">
-                <h3>Saved Searches</h3>
-                <div id="savedSearchesList"></div>
-            </div>
         </div>
 
         <div class="main-content">
             <div class="results-header">
-                <div class="search-stats" id="searchStats" style="display: none;"></div>
                 <span id="resultsCount">0 dreams</span>
             </div>
             <div class="results-grid" id="resultsGrid"></div>
@@ -798,19 +831,38 @@
                 <input type="text" id="dreamTags" placeholder="flying, water, family...">
             </div>
             <div class="modal-buttons">
-                <button class="btn btn-secondary" onclick="window.app.hideModal()">Cancel</button>
-                <button class="btn btn-primary" id="saveDreamButton" onclick="window.app.saveDream()">Save Dream</button>
-                <button class="btn btn-secondary" id="deleteDreamButton" onclick="window.app.deleteCurrentDream()" style="display: none; background: #FF3B30; color: white;">Delete</button>
+                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveDreamButton">Save Dream</button>
+                <button class="btn btn-secondary" id="deleteDreamButton" style="display: none; background: #FF3B30; color: white;">Delete</button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="calendarOverlay" onclick="if(event.target === this) window.app.hideCalendar()">
+    <div class="modal-overlay" id="driveSetupModal">
+        <div class="modal" onclick="event.stopPropagation()">
+            <h2>Google Drive Backup Setup</h2>
+            <div id="driveSetupContent">
+                <p style="margin-bottom: 20px; color: #86868b; line-height: 1.6;">
+                    Connect your Google Drive to automatically backup your dreams daily. Your backups will be stored in a folder you choose.
+                </p>
+                <div id="driveStatus" style="margin-bottom: 20px; padding: 16px; background: #f5f5f7; border-radius: 10px; display: none;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">Status</div>
+                    <div id="driveStatusText" style="color: #86868b; font-size: 14px;"></div>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" id="closeDriveSetupBtn">Cancel</button>
+                    <button class="btn btn-primary" id="connectDriveBtn">Connect Google Drive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="calendarOverlay">
         <div class="calendar-picker modal">
             <div class="calendar-header">
-                <button class="calendar-nav" onclick="window.app.prevMonth()">‹</button>
+                <button class="calendar-nav" id="prevMonthBtn">‹</button>
                 <div class="calendar-title-group">
-                    <select class="calendar-select" id="calMonthSelect" onchange="window.app.updateCalendar()">
+                    <select class="calendar-select" id="calMonthSelect">
                         <option value="0">January</option>
                         <option value="1">February</option>
                         <option value="2">March</option>
@@ -824,9 +876,9 @@
                         <option value="10">November</option>
                         <option value="11">December</option>
                     </select>
-                    <select class="calendar-select" id="calYearSelect" onchange="window.app.updateCalendar()"></select>
+                    <select class="calendar-select" id="calYearSelect"></select>
                 </div>
-                <button class="calendar-nav" onclick="window.app.nextMonth()">›</button>
+                <button class="calendar-nav" id="nextMonthBtn">›</button>
             </div>
             <div class="calendar-content">
                 <div class="calendar-grid" id="calendarGrid">
@@ -840,128 +892,50 @@
                 </div>
             </div>
             <div class="calendar-actions">
-                <button class="calendar-btn secondary" onclick="window.app.clearCalendar()">Clear</button>
-                <button class="calendar-btn primary" onclick="window.app.goToToday()">Today</button>
+                <button class="calendar-btn secondary" id="clearCalBtn">Clear</button>
+                <button class="calendar-btn primary" id="todayBtn">Today</button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-        window.app = {
-            dreams: [],
-            filter: '',
-            category: 'all',
-            dateFilter: null,
-            calendarDate: new Date(),
-            selectedDate: null,
-            editingDreamId: null,
-            savedSearches: [],
-            activeThemes: [],
-            activeMoods: [],
-            searchEngine: null,
-            
-            init() {
-                console.log('App initializing...');
-                this.initSearchEngine();
+(function() {
+    'use strict';
+    
+    const app = {
+        dreams: [],
+        filter: '',
+        category: 'all',
+        dateFilter: null,
+        calendarDate: new Date(),
+        selectedDate: null,
+        editingDreamId: null,
+        driveAccessToken: null,
+        driveFolderId: null,
+        driveBackupFileId: null,
+        
+        init() {
+            try {
                 this.loadDreams();
-                this.loadSavedSearches();
+                this.loadDriveConfig();
                 this.setupListeners();
                 this.render();
-                console.log('App initialized with', this.dreams.length, 'dreams');
-            },
-            
-            initSearchEngine() {
-                this.searchEngine = {
-                    themes: {
-                        flight: ['flying', 'soaring', 'floating', 'hovering', 'gliding', 'airborne', 'weightless', 'sky', 'clouds', 'wings'],
-                        water: ['underwater', 'ocean', 'sea', 'swimming', 'diving', 'aquatic', 'marine', 'beach', 'waves', 'lake', 'river'],
-                        nature: ['mountains', 'forest', 'trees', 'wildlife', 'outdoors', 'wilderness', 'landscape', 'garden', 'flowers', 'animals'],
-                        urban: ['city', 'building', 'street', 'urban', 'metropolis', 'town', 'downtown', 'architecture', 'skyscraper'],
-                        ancient: ['ancient', 'old', 'historical', 'ruins', 'past', 'antiquated', 'vintage', 'classic', 'traditional'],
-                        home: ['home', 'house', 'childhood', 'family', 'bedroom', 'room', 'apartment', 'domestic'],
-                        adventure: ['adventure', 'journey', 'quest', 'explore', 'travel', 'discovery', 'expedition'],
-                        fantasy: ['magic', 'fantasy', 'mystical', 'enchanted', 'mythical', 'supernatural', 'wizard', 'dragon']
-                    },
-                    
-                    moods: {
-                        peaceful: ['peaceful', 'calm', 'serene', 'tranquil', 'relaxed', 'quiet', 'gentle', 'soothing'],
-                        exciting: ['exciting', 'thrilling', 'energetic', 'intense', 'exhilarating', 'vibrant', 'dynamic'],
-                        mysterious: ['mysterious', 'enigmatic', 'strange', 'bizarre', 'unknown', 'cryptic', 'puzzling'],
-                        nostalgic: ['nostalgic', 'memory', 'remember', 'past', 'childhood', 'reminisce', 'sentimental']
-                    },
-                    
-                    search(query, dreams) {
-                        const queryLower = query.toLowerCase();
-                        const words = queryLower.split(/\s+/).filter(w => w.length > 2);
-                        
-                        return dreams.map(dream => {
-                            const text = `${dream.title} ${dream.content} ${dream.tags.join(' ')}`.toLowerCase();
-                            let score = 0;
-                            let matchedThemes = [];
-                            let matchedMoods = [];
-                            
-                            words.forEach(word => {
-                                const regex = new RegExp('\\b' + word, 'i');
-                                if (regex.test(text)) score += 10;
-                            });
-                            
-                            Object.entries(this.themes).forEach(([theme, synonyms]) => {
-                                let themeScore = 0;
-                                synonyms.forEach(synonym => {
-                                    if (queryLower.includes(synonym)) {
-                                        synonyms.forEach(relatedWord => {
-                                            if (text.includes(relatedWord)) themeScore += 3;
-                                        });
-                                    }
-                                });
-                                if (themeScore > 0) {
-                                    score += themeScore;
-                                    matchedThemes.push(theme);
-                                }
-                            });
-                            
-                            Object.entries(this.moods).forEach(([mood, keywords]) => {
-                                keywords.forEach(keyword => {
-                                    if (text.includes(keyword)) matchedMoods.push(mood);
-                                });
-                            });
-                            
-                            return { 
-                                ...dream, 
-                                score,
-                                matchedThemes: [...new Set(matchedThemes)],
-                                matchedMoods: [...new Set(matchedMoods)]
-                            };
-                        }).filter(d => d.score > 0).sort((a, b) => b.score - a.score);
-                    },
-                    
-                    getSuggestions(query) {
-                        if (!query || query.length < 2) return [];
-                        const suggestions = [];
-                        const queryLower = query.toLowerCase();
-                        
-                        Object.entries(this.themes).forEach(([theme, synonyms]) => {
-                            synonyms.forEach(synonym => {
-                                if (synonym.startsWith(queryLower) && !suggestions.includes(synonym)) {
-                                    suggestions.push(synonym);
-                                }
-                            });
-                        });
-                        
-                        return suggestions.slice(0, 5);
-                    }
-                };
-            },
-            
-            getLocalDateString(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return year + '-' + month + '-' + day;
-            },
-            
-            loadDreams() {
+                this.initGoogleDrive();
+            } catch(e) {
+                console.error('Init error:', e);
+            }
+        },
+        
+        getLocalDateString(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        },
+        
+        loadDreams() {
+            try {
                 const stored = localStorage.getItem('dreams');
                 if (stored) {
                     this.dreams = JSON.parse(stored);
@@ -994,527 +968,646 @@
                     ];
                     this.saveDreams();
                 }
-            },
-            
-            saveDreams() {
+            } catch(e) {
+                console.error('Load error:', e);
+                this.dreams = [];
+            }
+        },
+        
+        loadDriveConfig() {
+            try {
+                const config = localStorage.getItem('driveConfig');
+                if (config) {
+                    const parsed = JSON.parse(config);
+                    this.driveFolderId = parsed.folderId;
+                    this.driveBackupFileId = parsed.backupFileId;
+                }
+            } catch(e) {
+                console.error('Drive config load error:', e);
+            }
+        },
+        
+        saveDriveConfig() {
+            try {
+                localStorage.setItem('driveConfig', JSON.stringify({
+                    folderId: this.driveFolderId,
+                    backupFileId: this.driveBackupFileId
+                }));
+            } catch(e) {
+                console.error('Drive config save error:', e);
+            }
+        },
+        
+        saveDreams() {
+            try {
                 localStorage.setItem('dreams', JSON.stringify(this.dreams));
-            },
+                this.autoBackup();
+                this.scheduleDriveBackup();
+            } catch(e) {
+                console.error('Save error:', e);
+            }
+        },
+        
+        scheduleDriveBackup() {
+            if (!this.driveFolderId) return;
             
-            loadSavedSearches() {
-                const stored = localStorage.getItem('savedSearches');
-                if (stored) {
-                    this.savedSearches = JSON.parse(stored);
-                } else {
-                    this.savedSearches = [];
-                }
-                this.renderSavedSearches();
-            },
+            const lastDriveBackup = localStorage.getItem('lastDriveBackup');
+            const today = new Date().toDateString();
             
-            saveSavedSearches() {
-                localStorage.setItem('savedSearches', JSON.stringify(this.savedSearches));
-                this.renderSavedSearches();
-            },
-            
-            setupListeners() {
-                const searchInput = document.getElementById('searchInput');
-                const dateFilter = document.getElementById('dateFilter');
-                const calendarTrigger = document.getElementById('calendarTrigger');
-                const advancedTrigger = document.getElementById('advancedTrigger');
-                const modalOverlay = document.getElementById('addDreamModal');
-                
-                searchInput.oninput = (e) => {
-                    this.filter = e.target.value;
-                    this.showSearchSuggestions(e.target.value);
-                    this.render();
-                };
-                
-                searchInput.onkeydown = (e) => {
-                    if (e.key === 'Enter' && this.filter.trim()) {
-                        this.saveSearch(this.filter);
-                        this.hideSuggestions();
-                    }
-                    if (e.key === 'Escape') {
-                        this.hideSuggestions();
-                    }
-                };
-                
-                searchInput.onfocus = (e) => {
-                    if (e.target.value) {
-                        this.showSearchSuggestions(e.target.value);
-                    }
-                };
-                
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.search-input') && !e.target.closest('.search-suggestions')) {
-                        this.hideSuggestions();
-                    }
-                });
-                
-                dateFilter.onchange = (e) => {
-                    this.applyDateFilter(e.target.value);
-                };
-                
-                calendarTrigger.onclick = () => {
-                    this.showCalendar();
-                };
-                
-                advancedTrigger.onclick = () => {
-                    this.toggleAdvancedFilters();
-                };
-                
-                modalOverlay.onclick = (e) => {
-                    if (e.target === modalOverlay) {
-                        this.hideModal();
-                    }
-                };
-            },
-            
-            toggleAdvancedFilters() {
-                const filters = document.getElementById('advancedFilters');
-                const trigger = document.getElementById('advancedTrigger');
-                filters.classList.toggle('show');
-                trigger.classList.toggle('active');
-            },
-            
-            toggleTheme(theme) {
-                const index = this.activeThemes.indexOf(theme);
-                if (index > -1) {
-                    this.activeThemes.splice(index, 1);
-                } else {
-                    this.activeThemes.push(theme);
-                }
-                
-                const chip = document.querySelector(`[data-theme="${theme}"]`);
-                chip.classList.toggle('active');
-                this.render();
-            },
-            
-            toggleMood(mood) {
-                const index = this.activeMoods.indexOf(mood);
-                if (index > -1) {
-                    this.activeMoods.splice(index, 1);
-                } else {
-                    this.activeMoods.push(mood);
-                }
-                
-                const chip = document.querySelector(`[data-mood="${mood}"]`);
-                chip.classList.toggle('active');
-                this.render();
-            },
-            
-            showSearchSuggestions(query) {
-                const suggestionsDiv = document.getElementById('searchSuggestions');
-                
-                if (!query || query.length < 2) {
-                    this.hideSuggestions();
+            if (lastDriveBackup) {
+                const lastBackupDate = new Date(lastDriveBackup).toDateString();
+                if (lastBackupDate === today) {
                     return;
                 }
-                
-                const suggestions = this.searchEngine.getSuggestions(query);
-                
-                if (suggestions.length === 0) {
-                    this.hideSuggestions();
-                    return;
-                }
-                
-                suggestionsDiv.innerHTML = suggestions.map(s => 
-                    `<div class="suggestion-item" onclick="window.app.applySuggestion('${s}')">
-                        <span class="suggestion-icon">🔍</span>${s}
-                    </div>`
-                ).join('');
-                
-                suggestionsDiv.classList.add('show');
-            },
+            }
             
-            hideSuggestions() {
-                document.getElementById('searchSuggestions').classList.remove('show');
-            },
-            
-            applySuggestion(suggestion) {
-                document.getElementById('searchInput').value = suggestion;
-                this.filter = suggestion;
-                this.hideSuggestions();
-                this.render();
-            },
-            
-            saveSearch(query) {
-                if (!query.trim()) return;
-                
-                const search = {
-                    id: Date.now(),
-                    query: query.trim(),
-                    date: new Date().toISOString()
-                };
-                
-                if (!this.savedSearches.some(s => s.query === search.query)) {
-                    this.savedSearches.unshift(search);
-                    if (this.savedSearches.length > 10) {
-                        this.savedSearches = this.savedSearches.slice(0, 10);
-                    }
-                    this.saveSavedSearches();
-                }
-            },
-            
-            applySavedSearch(query) {
-                document.getElementById('searchInput').value = query;
-                this.filter = query;
-                this.render();
-            },
-            
-            deleteSavedSearch(id) {
-                this.savedSearches = this.savedSearches.filter(s => s.id !== id);
-                this.saveSavedSearches();
-            },
-            
-            renderSavedSearches() {
-                const container = document.getElementById('savedSearchesList');
-                if (this.savedSearches.length === 0) {
-                    container.innerHTML = '<p style="color: #86868b; font-size: 13px; padding: 12px 0;">No saved searches yet</p>';
-                    return;
-                }
-                
-                container.innerHTML = this.savedSearches.map(s => 
-                    `<div class="saved-search-item" onclick="window.app.applySavedSearch('${s.query.replace(/'/g, "\\'")}')">
-                        <span>🔍 ${s.query}</span>
-                        <button class="saved-search-delete" onclick="event.stopPropagation(); window.app.deleteSavedSearch(${s.id})">×</button>
-                    </div>`
-                ).join('');
-            },
-            
-            showModal() {
-                this.editingDreamId = null;
-                const modal = document.getElementById('addDreamModal');
-                modal.classList.add('show');
-                document.getElementById('modalTitle').textContent = 'Add New Dream';
-                document.getElementById('saveDreamButton').textContent = 'Save Dream';
-                document.getElementById('deleteDreamButton').style.display = 'none';
-                document.getElementById('dreamDate').value = this.getLocalDateString(new Date());
-                document.getElementById('dreamTitle').value = '';
-                document.getElementById('dreamContent').value = '';
-                document.getElementById('dreamTags').value = '';
-                setTimeout(() => document.getElementById('dreamTitle').focus(), 100);
-            },
-            
-            showEditModal(dreamId) {
-                const dream = this.dreams.find(d => d.id === dreamId);
-                if (!dream) return;
-                
-                this.editingDreamId = dreamId;
-                const modal = document.getElementById('addDreamModal');
-                modal.classList.add('show');
-                
-                document.getElementById('modalTitle').textContent = 'Edit Dream';
-                document.getElementById('saveDreamButton').textContent = 'Update Dream';
-                document.getElementById('deleteDreamButton').style.display = 'block';
-                document.getElementById('dreamDate').value = dream.date;
-                document.getElementById('dreamTitle').value = dream.title;
-                document.getElementById('dreamContent').value = dream.content;
-                document.getElementById('dreamTags').value = dream.tags.join(', ');
-                
-                setTimeout(() => document.getElementById('dreamTitle').focus(), 100);
-            },
-            
-            openDream(dreamId) {
-                this.showEditModal(dreamId);
-            },
-            
-            hideModal() {
-                document.getElementById('addDreamModal').classList.remove('show');
-                this.editingDreamId = null;
-            },
-            
-            saveDream() {
-                const date = document.getElementById('dreamDate').value;
-                const title = document.getElementById('dreamTitle').value.trim();
-                const content = document.getElementById('dreamContent').value.trim();
-                const tags = document.getElementById('dreamTags').value.split(',').map(t => t.trim()).filter(t => t);
-                
-                if (!date || !title || !content) {
-                    alert('Please fill in all required fields');
-                    return;
-                }
-                
-                if (this.editingDreamId) {
-                    const dreamIndex = this.dreams.findIndex(d => d.id === this.editingDreamId);
-                    if (dreamIndex !== -1) {
-                        this.dreams[dreamIndex] = {
-                            ...this.dreams[dreamIndex],
-                            date,
-                            title,
-                            content,
-                            tags,
-                            category: this.guessCategory(title, content, tags)
-                        };
-                    }
-                } else {
-                    const dream = {
-                        id: Date.now(),
-                        date,
-                        title,
-                        content,
-                        tags,
-                        category: this.guessCategory(title, content, tags)
-                    };
-                    this.dreams.unshift(dream);
-                }
-                
-                this.saveDreams();
-                this.hideModal();
-                this.render();
-            },
-            
-            deleteDream(dreamId) {
-                if (!confirm('Are you sure you want to delete this dream? This cannot be undone.')) {
-                    return;
-                }
-                
-                this.dreams = this.dreams.filter(d => d.id !== dreamId);
-                this.saveDreams();
-                this.render();
-            },
-            
-            deleteCurrentDream() {
-                if (this.editingDreamId) {
-                    this.deleteDream(this.editingDreamId);
-                    this.hideModal();
-                }
-            },
-            
-            guessCategory(title, content, tags) {
-                const text = `${title} ${content} ${tags.join(' ')}`.toLowerCase();
-                if (text.includes('fly')) return 'Adventure';
-                if (text.includes('water') || text.includes('ocean')) return 'Fantasy';
-                if (text.includes('home') || text.includes('childhood')) return 'Memory';
-                return 'General';
-            },
-            
-            selectCategory(cat) {
-                this.category = cat;
-                document.querySelectorAll('.category-item').forEach(el => {
-                    el.classList.toggle('active', el.dataset.category === cat);
-                });
-                this.render();
-            },
-            
-            applyDateFilter(filter) {
-                const now = new Date();
-                switch (filter) {
-                    case 'week':
-                        this.dateFilter = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                        break;
-                    case 'month':
-                        this.dateFilter = new Date(now.getFullYear(), now.getMonth(), 1);
-                        break;
-                    case 'year':
-                        this.dateFilter = new Date(now.getFullYear(), 0, 1);
-                        break;
-                    default:
-                        this.dateFilter = null;
-                }
-                this.selectedDate = null;
-                this.render();
-            },
-            
-            showCalendar() {
-                document.getElementById('calendarOverlay').classList.add('show');
-                this.initCalendarYear();
-                this.updateCalendar();
-            },
-            
-            hideCalendar() {
-                document.getElementById('calendarOverlay').classList.remove('show');
-            },
-            
-            initCalendarYear() {
-                const yearSelect = document.getElementById('calYearSelect');
-                yearSelect.innerHTML = '';
-                const currentYear = new Date().getFullYear();
-                
-                for (let year = currentYear - 5; year <= currentYear + 1; year++) {
-                    const option = document.createElement('option');
-                    option.value = year;
-                    option.textContent = year;
-                    if (year === this.calendarDate.getFullYear()) {
-                        option.selected = true;
-                    }
-                    yearSelect.appendChild(option);
-                }
-            },
-            
-            updateCalendar() {
-                const monthSelect = document.getElementById('calMonthSelect');
-                const yearSelect = document.getElementById('calYearSelect');
-                this.calendarDate = new Date(parseInt(yearSelect.value), parseInt(monthSelect.value), 1);
-                this.renderCalendar();
-            },
-            
-            renderCalendar() {
-                const grid = document.getElementById('calendarGrid');
-                const year = this.calendarDate.getFullYear();
-                const month = this.calendarDate.getMonth();
-                const dayHeaders = grid.querySelectorAll('.calendar-day-header');
-                grid.innerHTML = '';
-                dayHeaders.forEach(header => grid.appendChild(header));
-                const firstDay = new Date(year, month, 1);
-                const startDate = new Date(firstDay);
-                startDate.setDate(startDate.getDate() - firstDay.getDay());
-                const today = new Date();
-                const todayString = this.getLocalDateString(today);
-                const dreamDates = new Set(this.dreams.map(d => d.date));
-                for (let i = 0; i < 42; i++) {
-                    const currentDate = new Date(startDate);
-                    currentDate.setDate(startDate.getDate() + i);
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'calendar-day';
-                    dayElement.textContent = currentDate.getDate();
-                    const dateString = this.getLocalDateString(currentDate);
-                    if (currentDate.getMonth() !== month) dayElement.classList.add('other-month');
-                    if (dateString === todayString) dayElement.classList.add('today');
-                    if (dreamDates.has(dateString)) dayElement.classList.add('has-dream');
-                    if (this.selectedDate && dateString === this.selectedDate) dayElement.classList.add('selected');
-                    dayElement.onclick = () => this.selectDate(dateString);
-                    grid.appendChild(dayElement);
-                }
-                document.getElementById('calMonthSelect').value = month;
-                document.getElementById('calYearSelect').value = year;
-            },
-            
-            selectDate(dateString) {
-                this.selectedDate = dateString;
-                this.dateFilter = null;
-                document.getElementById('dateFilter').value = '';
-                this.hideCalendar();
-                this.render();
-            },
-            
-            prevMonth() {
-                this.calendarDate = new Date(this.calendarDate.getFullYear(), this.calendarDate.getMonth() - 1, 1);
-                this.renderCalendar();
-            },
-            
-            nextMonth() {
-                this.calendarDate = new Date(this.calendarDate.getFullYear(), this.calendarDate.getMonth() + 1, 1);
-                this.renderCalendar();
-            },
-            
-            clearCalendar() {
-                this.selectedDate = null;
-                this.dateFilter = null;
-                document.getElementById('dateFilter').value = '';
-                this.hideCalendar();
-                this.render();
-            },
-            
-            goToToday() {
-                const today = new Date();
-                this.calendarDate = new Date(today.getFullYear(), today.getMonth(), 1);
-                this.renderCalendar();
-                const todayString = this.getLocalDateString(today);
-                const hasDreams = this.dreams.some(d => d.date === todayString);
-                if (hasDreams) this.selectDate(todayString);
-            },
-            
-            getFiltered() {
-                const start = performance.now();
-                let filtered = this.dreams;
-                let usingSemanticSearch = false;
-                
-                if (this.selectedDate) {
-                    filtered = filtered.filter(d => d.date === this.selectedDate);
-                } else {
-                    if (this.category !== 'all') {
-                        filtered = filtered.filter(d => d.category === this.category);
-                    }
-                    if (this.dateFilter) {
-                        filtered = filtered.filter(d => new Date(d.date) >= this.dateFilter);
-                    }
-                }
-                
-                if (this.filter) {
-                    const searchResults = this.searchEngine.search(this.filter, filtered);
-                    filtered = searchResults;
-                    usingSemanticSearch = true;
-                }
-                
-                if (this.activeThemes.length > 0) {
-                    filtered = filtered.filter(dream => {
-                        const text = `${dream.title} ${dream.content} ${dream.tags.join(' ')}`.toLowerCase();
-                        return this.activeThemes.some(theme => {
-                            const synonyms = this.searchEngine.themes[theme] || [];
-                            return synonyms.some(syn => text.includes(syn));
-                        });
-                    });
-                }
-                
-                if (this.activeMoods.length > 0) {
-                    filtered = filtered.filter(dream => {
-                        const text = `${dream.title} ${dream.content}`.toLowerCase();
-                        return this.activeMoods.some(mood => {
-                            const keywords = this.searchEngine.moods[mood] || [];
-                            return keywords.some(keyword => text.includes(keyword));
-                        });
-                    });
-                }
-                
-                const time = Math.round(performance.now() - start);
-                document.getElementById('perfIndicator').textContent = `${time}ms`;
-                
-                if (this.filter && usingSemanticSearch && filtered.length > 0) {
-                    const statsEl = document.getElementById('searchStats');
-                    statsEl.style.display = 'inline-block';
-                    statsEl.textContent = `✨ Found ${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
-                } else {
-                    document.getElementById('searchStats').style.display = 'none';
-                }
-                
-                return filtered;
-            },
-            
-            render() {
-                const filtered = this.getFiltered();
-                const grid = document.getElementById('resultsGrid');
-                if (filtered.length === 0) {
-                    grid.innerHTML = '<div class="no-results"><h3>No dreams found</h3><p>Try adjusting your search or filters</p></div>';
-                } else {
-                    const self = this;
-                    grid.innerHTML = filtered.map(d => `<div class="dream-card" data-dream-id="${d.id}"><div class="dream-date">${new Date(d.date).toLocaleDateString()}</div><div class="dream-title">${d.title}</div><div class="dream-content">${d.content}</div><div class="dream-tags">${d.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div><div class="dream-relationships">Category: ${d.category}</div></div>`).join('');
-                    document.querySelectorAll('.dream-card').forEach(card => {
-                        card.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const dreamId = parseInt(this.dataset.dreamId);
-                            self.openDream(dreamId);
-                        });
-                    });
-                }
-                let countText = `${filtered.length} dream${filtered.length !== 1 ? 's' : ''}`;
-                if (this.selectedDate) countText += ` on ${new Date(this.selectedDate).toLocaleDateString()}`;
-                document.getElementById('resultsCount').textContent = countText;
-                const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-                const recent = this.dreams.filter(d => new Date(d.date) >= weekAgo).length;
-                document.getElementById('statsDisplay').textContent = `${this.dreams.length} dreams total • ${recent} this week`;
-                this.renderCategories();
-            },
-            
-            renderCategories() {
-                const cats = {};
-                this.dreams.forEach(d => { cats[d.category] = (cats[d.category] || 0) + 1; });
-                const list = document.getElementById('categoryList');
-                const existing = list.querySelectorAll('[data-category]:not([data-category="all"])');
-                existing.forEach(el => el.remove());
-                document.getElementById('allCount').textContent = this.dreams.length;
-                Object.entries(cats).sort().forEach(([cat, count]) => {
-                    const li = document.createElement('li');
-                    li.className = 'category-item';
-                    if (cat === this.category) li.classList.add('active');
-                    li.dataset.category = cat;
-                    li.onclick = () => this.selectCategory(cat);
-                    li.innerHTML = `<span>${cat}</span><span class="category-count">${count}</span>`;
-                    list.appendChild(li);
+            if (this.driveAccessToken) {
+                this.backupToDrive().then(() => {
+                    localStorage.setItem('lastDriveBackup', new Date().toISOString());
                 });
             }
-        };
-        window.app.init();
+        },
+        
+        autoBackup() {
+            try {
+                const lastBackup = localStorage.getItem('lastBackup');
+                const today = new Date().toDateString();
+                
+                if (lastBackup) {
+                    const lastBackupDate = new Date(lastBackup).toDateString();
+                    if (lastBackupDate === today) {
+                        return;
+                    }
+                }
+                
+                const now = new Date();
+                const dateStr = this.getLocalDateString(now);
+                
+                let html = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dream Journal Backup</title>
+    <style>body{font-family:sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.6}.dream{margin-bottom:40px;padding:20px;background:#f9f9f9;border-radius:8px}</style>
+</head>
+<body>
+    <h1>Dream Journal Backup - ${dateStr}</h1>
+    <p>Total Dreams: ${this.dreams.length}</p>
+`;
+
+                this.dreams.forEach(dream => {
+                    html += `<div class="dream"><h2>${dream.title}</h2><p>${new Date(dream.date).toLocaleDateString()}</p><p>${dream.content}</p><p>Tags: ${dream.tags.join(', ')}</p></div>`;
+                });
+
+                html += `<script type="application/json" id="dream-data">${JSON.stringify(this.dreams)}<\/script></body></html>`;
+
+                const blob = new Blob([html], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Dreams-Backup-${dateStr}.html`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                localStorage.setItem('lastBackup', now.toISOString());
+            } catch(e) {
+                console.error('Auto-backup error:', e);
+            }
+        },
+        
+        setupListeners() {
+            const self = this;
+            
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                self.filter = e.target.value;
+                self.render();
+            });
+            
+            document.getElementById('dateFilter').addEventListener('change', function(e) {
+                self.applyDateFilter(e.target.value);
+            });
+            
+            document.getElementById('calendarTrigger').addEventListener('click', function() {
+                self.showCalendar();
+            });
+            
+            document.getElementById('addDreamBtn').addEventListener('click', function() {
+                self.showModal();
+            });
+            
+            document.getElementById('menuBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                self.toggleMenu();
+            });
+            
+            document.getElementById('manualBackupBtn').addEventListener('click', function() {
+                self.manualBackup();
+            });
+            
+            document.getElementById('importBackupBtn').addEventListener('click', function() {
+                self.importBackup();
+            });
+            
+            document.getElementById('driveBackupBtn').addEventListener('click', function() {
+                self.showDriveSetup();
+            });
+            
+            document.getElementById('connectDriveBtn').addEventListener('click', function() {
+                self.connectGoogleDrive();
+            });
+            
+            document.getElementById('closeDriveSetupBtn').addEventListener('click', function() {
+                self.hideDriveSetup();
+            });
+            
+            document.getElementById('driveSetupModal').addEventListener('click', function(e) {
+                if (e.target === this) self.hideDriveSetup();
+            });
+            
+            document.addEventListener('click', function() {
+                self.hideMenu();
+            });
+            
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                self.hideModal();
+            });
+            
+            document.getElementById('saveDreamButton').addEventListener('click', function() {
+                self.saveDream();
+            });
+            
+            document.getElementById('deleteDreamButton').addEventListener('click', function() {
+                self.deleteCurrentDream();
+            });
+            
+            document.getElementById('addDreamModal').addEventListener('click', function(e) {
+                if (e.target === this) self.hideModal();
+            });
+            
+            document.getElementById('calendarOverlay').addEventListener('click', function(e) {
+                if (e.target === this) self.hideCalendar();
+            });
+            
+            document.getElementById('prevMonthBtn').addEventListener('click', function() {
+                self.prevMonth();
+            });
+            
+            document.getElementById('nextMonthBtn').addEventListener('click', function() {
+                self.nextMonth();
+            });
+            
+            document.getElementById('calMonthSelect').addEventListener('change', function() {
+                self.updateCalendar();
+            });
+            
+            document.getElementById('calYearSelect').addEventListener('change', function() {
+                self.updateCalendar();
+            });
+            
+            document.getElementById('clearCalBtn').addEventListener('click', function() {
+                self.clearCalendar();
+            });
+            
+            document.getElementById('todayBtn').addEventListener('click', function() {
+                self.goToToday();
+            });
+            
+            document.querySelectorAll('.category-item').forEach(function(el) {
+                el.addEventListener('click', function() {
+                    self.selectCategory(this.dataset.category);
+                });
+            });
+        },
+        
+        toggleMenu() {
+            document.getElementById('menuDropdown').classList.toggle('show');
+        },
+        
+        hideMenu() {
+            document.getElementById('menuDropdown').classList.remove('show');
+        },
+        
+        manualBackup() {
+            this.hideMenu();
+            const now = new Date();
+            const dateStr = this.getLocalDateString(now);
+            let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Dream Journal Backup</title><style>body{font-family:sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.6}.dream{margin-bottom:40px;padding:20px;background:#f9f9f9;border-radius:8px}</style></head><body><h1>Dream Journal Backup - ${dateStr}</h1><p>Total: ${this.dreams.length}</p>`;
+            this.dreams.forEach(d => {
+                html += `<div class="dream"><h2>${d.title}</h2><p>${new Date(d.date).toLocaleDateString()}</p><p>${d.content}</p><p>Tags: ${d.tags.join(', ')}</p></div>`;
+            });
+            html += `<script type="application/json" id="dream-data">${JSON.stringify(this.dreams)}<\/script></body></html>`;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Dreams-Backup-${dateStr}.html`;
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('Backup downloaded');
+        },
+        
+        importBackup() {
+            this.hideMenu();
+            alert('Import feature coming soon');
+        },
+        
+        initGoogleDrive() {
+            window.handleGoogleAuth = (response) => {
+                if (response.access_token) {
+                    this.driveAccessToken = response.access_token;
+                    this.setupDriveFolder();
+                }
+            };
+        },
+        
+        showDriveSetup() {
+            this.hideMenu();
+            document.getElementById('driveSetupModal').classList.add('show');
+            document.body.classList.add('modal-open');
+            
+            if (this.driveFolderId) {
+                document.getElementById('driveStatus').style.display = 'block';
+                document.getElementById('driveStatusText').textContent = 'Google Drive backup is enabled. Daily backups are active.';
+                document.getElementById('connectDriveBtn').textContent = 'Reconnect Drive';
+            } else {
+                document.getElementById('driveStatus').style.display = 'none';
+                document.getElementById('connectDriveBtn').textContent = 'Connect Google Drive';
+            }
+        },
+        
+        hideDriveSetup() {
+            document.getElementById('driveSetupModal').classList.remove('show');
+            document.body.classList.remove('modal-open');
+        },
+        
+        connectGoogleDrive() {
+            const client = google.accounts.oauth2.initTokenClient({
+                client_id: '295707121127-qb12m077e8qugk8piql50iu49l4qdumg.apps.googleusercontent.com',
+                scope: 'https://www.googleapis.com/auth/drive.file',
+                callback: window.handleGoogleAuth,
+            });
+            client.requestAccessToken();
+        },
+        
+        async setupDriveFolder() {
+            try {
+                document.getElementById('driveStatusText').textContent = 'Setting up backup folder...';
+                document.getElementById('driveStatus').style.display = 'block';
+                
+                const folderMetadata = {
+                    name: 'Dream Journal Backups',
+                    mimeType: 'application/vnd.google-apps.folder'
+                };
+                
+                const folderResponse = await fetch('https://www.googleapis.com/drive/v3/files', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${this.driveAccessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(folderMetadata)
+                });
+                
+                const folder = await folderResponse.json();
+                this.driveFolderId = folder.id;
+                this.saveDriveConfig();
+                
+                document.getElementById('driveStatusText').textContent = 'Google Drive backup enabled! Your dreams will backup daily.';
+                
+                await this.backupToDrive();
+                
+                setTimeout(() => {
+                    this.hideDriveSetup();
+                }, 2000);
+                
+            } catch(e) {
+                console.error('Drive setup error:', e);
+                document.getElementById('driveStatusText').textContent = 'Error setting up Drive. Please try again.';
+            }
+        },
+        
+        async backupToDrive() {
+            if (!this.driveAccessToken || !this.driveFolderId) {
+                return;
+            }
+            
+            try {
+                const now = new Date();
+                const dateStr = this.getLocalDateString(now);
+                const fileName = `Dream-Journal-Backup-${dateStr}.json`;
+                
+                const fileContent = JSON.stringify({
+                    exportDate: now.toISOString(),
+                    totalDreams: this.dreams.length,
+                    dreams: this.dreams
+                }, null, 2);
+                
+                const metadata = {
+                    name: fileName,
+                    mimeType: 'application/json',
+                    parents: [this.driveFolderId]
+                };
+                
+                if (this.driveBackupFileId) {
+                    const updateResponse = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${this.driveBackupFileId}?uploadType=media`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${this.driveAccessToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: fileContent
+                    });
+                    
+                    if (!updateResponse.ok) {
+                        throw new Error('Failed to update backup');
+                    }
+                } else {
+                    const form = new FormData();
+                    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+                    form.append('file', new Blob([fileContent], { type: 'application/json' }));
+                    
+                    const uploadResponse = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${this.driveAccessToken}`
+                        },
+                        body: form
+                    });
+                    
+                    const file = await uploadResponse.json();
+                    this.driveBackupFileId = file.id;
+                    this.saveDriveConfig();
+                }
+                
+                console.log('Backed up to Google Drive successfully');
+            } catch(e) {
+                console.error('Drive backup error:', e);
+            }
+        },
+        
+        showModal() {
+            this.editingDreamId = null;
+            document.getElementById('addDreamModal').classList.add('show');
+            document.body.classList.add('modal-open');
+            document.getElementById('modalTitle').textContent = 'Add New Dream';
+            document.getElementById('saveDreamButton').textContent = 'Save Dream';
+            document.getElementById('deleteDreamButton').style.display = 'none';
+            document.getElementById('dreamDate').value = this.getLocalDateString(new Date());
+            document.getElementById('dreamTitle').value = '';
+            document.getElementById('dreamContent').value = '';
+            document.getElementById('dreamTags').value = '';
+        },
+        
+        showEditModal(dreamId) {
+            const dream = this.dreams.find(d => d.id === dreamId);
+            if (!dream) return;
+            this.editingDreamId = dreamId;
+            document.getElementById('addDreamModal').classList.add('show');
+            document.body.classList.add('modal-open');
+            document.getElementById('modalTitle').textContent = 'Edit Dream';
+            document.getElementById('saveDreamButton').textContent = 'Update Dream';
+            document.getElementById('deleteDreamButton').style.display = 'block';
+            document.getElementById('dreamDate').value = dream.date;
+            document.getElementById('dreamTitle').value = dream.title;
+            document.getElementById('dreamContent').value = dream.content;
+            document.getElementById('dreamTags').value = dream.tags.join(', ');
+        },
+        
+        hideModal() {
+            document.getElementById('addDreamModal').classList.remove('show');
+            document.body.classList.remove('modal-open');
+            this.editingDreamId = null;
+        },
+        
+        saveDream() {
+            const date = document.getElementById('dreamDate').value;
+            const title = document.getElementById('dreamTitle').value.trim();
+            const content = document.getElementById('dreamContent').value.trim();
+            const tags = document.getElementById('dreamTags').value.split(',').map(t => t.trim()).filter(t => t);
+            if (!date || !title || !content) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            if (this.editingDreamId) {
+                const idx = this.dreams.findIndex(d => d.id === this.editingDreamId);
+                if (idx !== -1) {
+                    this.dreams[idx] = {...this.dreams[idx], date, title, content, tags, category: this.guessCategory(title, content, tags)};
+                }
+            } else {
+                this.dreams.unshift({id: Date.now(), date, title, content, tags, category: this.guessCategory(title, content, tags)});
+            }
+            this.saveDreams();
+            this.hideModal();
+            this.render();
+        },
+        
+        deleteDream(dreamId) {
+            if (!confirm('Delete this dream?')) return;
+            this.dreams = this.dreams.filter(d => d.id !== dreamId);
+            this.saveDreams();
+            this.render();
+        },
+        
+        deleteCurrentDream() {
+            if (this.editingDreamId) {
+                this.deleteDream(this.editingDreamId);
+                this.hideModal();
+            }
+        },
+        
+        guessCategory(title, content, tags) {
+            const text = `${title} ${content} ${tags.join(' ')}`.toLowerCase();
+            if (text.includes('fly')) return 'Adventure';
+            if (text.includes('water') || text.includes('ocean')) return 'Fantasy';
+            if (text.includes('home') || text.includes('childhood')) return 'Memory';
+            return 'General';
+        },
+        
+        selectCategory(cat) {
+            this.category = cat;
+            document.querySelectorAll('.category-item').forEach(el => {
+                el.classList.toggle('active', el.dataset.category === cat);
+            });
+            this.render();
+        },
+        
+        applyDateFilter(filter) {
+            const now = new Date();
+            switch (filter) {
+                case 'week': this.dateFilter = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); break;
+                case 'month': this.dateFilter = new Date(now.getFullYear(), now.getMonth(), 1); break;
+                case 'year': this.dateFilter = new Date(now.getFullYear(), 0, 1); break;
+                default: this.dateFilter = null;
+            }
+            this.selectedDate = null;
+            this.render();
+        },
+        
+        showCalendar() {
+            document.getElementById('calendarOverlay').classList.add('show');
+            document.body.classList.add('modal-open');
+            this.initCalendarYear();
+            this.updateCalendar();
+        },
+        
+        hideCalendar() {
+            document.getElementById('calendarOverlay').classList.remove('show');
+            document.body.classList.remove('modal-open');
+        },
+        
+        initCalendarYear() {
+            const yearSelect = document.getElementById('calYearSelect');
+            yearSelect.innerHTML = '';
+            const currentYear = new Date().getFullYear();
+            for (let year = currentYear - 5; year <= currentYear + 1; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                if (year === this.calendarDate.getFullYear()) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+        },
+        
+        updateCalendar() {
+            const monthSelect = document.getElementById('calMonthSelect');
+            const yearSelect = document.getElementById('calYearSelect');
+            this.calendarDate = new Date(parseInt(yearSelect.value), parseInt(monthSelect.value), 1);
+            this.renderCalendar();
+        },
+        
+        renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const year = this.calendarDate.getFullYear();
+            const month = this.calendarDate.getMonth();
+            const dayHeaders = grid.querySelectorAll('.calendar-day-header');
+            grid.innerHTML = '';
+            dayHeaders.forEach(h => grid.appendChild(h));
+            const firstDay = new Date(year, month, 1);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            const today = new Date();
+            const todayString = this.getLocalDateString(today);
+            const dreamDates = new Set(this.dreams.map(d => d.date));
+            const self = this;
+            for (let i = 0; i < 42; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.textContent = currentDate.getDate();
+                const dateStr = this.getLocalDateString(currentDate);
+                if (currentDate.getMonth() !== month) dayEl.classList.add('other-month');
+                if (dateStr === todayString) dayEl.classList.add('today');
+                if (dreamDates.has(dateStr)) dayEl.classList.add('has-dream');
+                if (this.selectedDate && dateStr === this.selectedDate) dayEl.classList.add('selected');
+                dayEl.addEventListener('click', function() { self.selectDate(dateStr); });
+                grid.appendChild(dayEl);
+            }
+            document.getElementById('calMonthSelect').value = month;
+            document.getElementById('calYearSelect').value = year;
+        },
+        
+        selectDate(dateStr) {
+            this.selectedDate = dateStr;
+            this.dateFilter = null;
+            document.getElementById('dateFilter').value = '';
+            this.hideCalendar();
+            this.render();
+        },
+        
+        prevMonth() {
+            this.calendarDate = new Date(this.calendarDate.getFullYear(), this.calendarDate.getMonth() - 1, 1);
+            this.renderCalendar();
+        },
+        
+        nextMonth() {
+            this.calendarDate = new Date(this.calendarDate.getFullYear(), this.calendarDate.getMonth() + 1, 1);
+            this.renderCalendar();
+        },
+        
+        clearCalendar() {
+            this.selectedDate = null;
+            this.dateFilter = null;
+            document.getElementById('dateFilter').value = '';
+            this.hideCalendar();
+            this.render();
+        },
+        
+        goToToday() {
+            const today = new Date();
+            this.calendarDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            this.renderCalendar();
+            const todayStr = this.getLocalDateString(today);
+            if (this.dreams.some(d => d.date === todayStr)) this.selectDate(todayStr);
+        },
+        
+        getFiltered() {
+            const start = performance.now();
+            let filtered = this.dreams;
+            if (this.selectedDate) {
+                filtered = filtered.filter(d => d.date === this.selectedDate);
+            } else {
+                if (this.category !== 'all') filtered = filtered.filter(d => d.category === this.category);
+                if (this.filter) {
+                    const q = this.filter.toLowerCase();
+                    filtered = filtered.filter(d => d.title.toLowerCase().includes(q) || d.content.toLowerCase().includes(q) || d.tags.some(t => t.toLowerCase().includes(q)));
+                }
+                if (this.dateFilter) filtered = filtered.filter(d => new Date(d.date) >= this.dateFilter);
+            }
+            const time = Math.round(performance.now() - start);
+            document.getElementById('perfIndicator').textContent = `${time}ms`;
+            return filtered;
+        },
+        
+        render() {
+            const filtered = this.getFiltered();
+            const grid = document.getElementById('resultsGrid');
+            const self = this;
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="no-results"><h3>No dreams found</h3></div>';
+            } else {
+                grid.innerHTML = filtered.map(d => `<div class="dream-card" data-dream-id="${d.id}"><div class="dream-date">${new Date(d.date).toLocaleDateString()}</div><div class="dream-title">${d.title}</div><div class="dream-content">${d.content}</div><div class="dream-tags">${d.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div><div class="dream-relationships">Category: ${d.category}</div></div>`).join('');
+                document.querySelectorAll('.dream-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        self.showEditModal(parseInt(this.dataset.dreamId));
+                    });
+                });
+            }
+            let countText = `${filtered.length} dream${filtered.length !== 1 ? 's' : ''}`;
+            if (this.selectedDate) countText += ` on ${new Date(this.selectedDate).toLocaleDateString()}`;
+            document.getElementById('resultsCount').textContent = countText;
+            const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const recent = this.dreams.filter(d => new Date(d.date) >= weekAgo).length;
+            document.getElementById('statsDisplay').textContent = `${this.dreams.length} dreams total • ${recent} this week`;
+            this.renderCategories();
+        },
+        
+        renderCategories() {
+            const cats = {};
+            this.dreams.forEach(d => { cats[d.category] = (cats[d.category] || 0) + 1; });
+            const list = document.getElementById('categoryList');
+            const existing = list.querySelectorAll('[data-category]:not([data-category="all"])');
+            existing.forEach(el => el.remove());
+            document.getElementById('allCount').textContent = this.dreams.length;
+            const self = this;
+            Object.entries(cats).sort().forEach(([cat, count]) => {
+                const li = document.createElement('li');
+                li.className = 'category-item';
+                if (cat === this.category) li.classList.add('active');
+                li.dataset.category = cat;
+                li.innerHTML = `<span>${cat}</span><span class="category-count">${count}</span>`;
+                li.addEventListener('click', function() { self.selectCategory(cat); });
+                list.appendChild(li);
+            });
+        }
+    };
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { app.init(); });
+    } else {
+        app.init();
+    }
+})();
     </script>
 </body>
 </html>
-
