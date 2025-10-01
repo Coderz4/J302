@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dream Journal</title>
     <style>
         * {
@@ -1002,77 +1002,8 @@
         saveDreams() {
             try {
                 localStorage.setItem('dreams', JSON.stringify(this.dreams));
-                this.autoBackup();
-                this.scheduleDriveBackup();
             } catch(e) {
                 console.error('Save error:', e);
-            }
-        },
-        
-        scheduleDriveBackup() {
-            if (!this.driveFolderId) return;
-            
-            const lastDriveBackup = localStorage.getItem('lastDriveBackup');
-            const today = new Date().toDateString();
-            
-            if (lastDriveBackup) {
-                const lastBackupDate = new Date(lastDriveBackup).toDateString();
-                if (lastBackupDate === today) {
-                    return;
-                }
-            }
-            
-            if (this.driveAccessToken) {
-                this.backupToDrive().then(() => {
-                    localStorage.setItem('lastDriveBackup', new Date().toISOString());
-                });
-            }
-        },
-        
-        autoBackup() {
-            try {
-                const lastBackup = localStorage.getItem('lastBackup');
-                const today = new Date().toDateString();
-                
-                if (lastBackup) {
-                    const lastBackupDate = new Date(lastBackup).toDateString();
-                    if (lastBackupDate === today) {
-                        return;
-                    }
-                }
-                
-                const now = new Date();
-                const dateStr = this.getLocalDateString(now);
-                
-                let html = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Dream Journal Backup</title>
-    <style>body{font-family:sans-serif;max-width:800px;margin:40px auto;padding:20px;line-height:1.6}.dream{margin-bottom:40px;padding:20px;background:#f9f9f9;border-radius:8px}</style>
-</head>
-<body>
-    <h1>Dream Journal Backup - ${dateStr}</h1>
-    <p>Total Dreams: ${this.dreams.length}</p>
-`;
-
-                this.dreams.forEach(dream => {
-                    html += `<div class="dream"><h2>${dream.title}</h2><p>${new Date(dream.date).toLocaleDateString()}</p><p>${dream.content}</p><p>Tags: ${dream.tags.join(', ')}</p></div>`;
-                });
-
-                html += `<script type="application/json" id="dream-data">${JSON.stringify(this.dreams)}<\/script></body></html>`;
-
-                const blob = new Blob([html], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Dreams-Backup-${dateStr}.html`;
-                a.click();
-                URL.revokeObjectURL(url);
-                
-                localStorage.setItem('lastBackup', now.toISOString());
-            } catch(e) {
-                console.error('Auto-backup error:', e);
             }
         },
         
