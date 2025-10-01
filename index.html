@@ -380,16 +380,25 @@
                 font-size: 24px;
             }
             
+            .main-content {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+            }
+            
             .results-grid {
                 padding: 8px;
                 gap: 12px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                justify-content: center;
+                width: 100%;
             }
             
             .results-header {
                 padding: 12px 8px;
+                text-align: center;
             }
             
             .dream-card {
@@ -397,6 +406,7 @@
                 margin: 0 auto;
                 width: calc(100% - 16px);
                 max-width: 100%;
+                box-sizing: border-box;
             }
             
             .modal {
@@ -574,7 +584,8 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             position: relative;
             margin: auto;
-            touch-action: none;
+            touch-action: pan-y;
+            padding-bottom: 40px;
         }
 
         .modal h2 {
@@ -602,6 +613,8 @@
             font-size: 15px;
             background: #fafafa;
             font-family: inherit;
+            box-sizing: border-box;
+            touch-action: manipulation;
         }
 
         .form-group input:focus,
